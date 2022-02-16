@@ -1,18 +1,25 @@
 package model;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.time.LocalDate;
+import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Promo {
     protected String promoCode = "";
     protected String details = "";
     protected String shortCode = "";
-    protected LocalDate startDate;
-    protected LocalDate endDate;
+    protected LocalDateTime startDate;
+    protected LocalDateTime endDate;
 
-    public Promo(String promoCode, String details, String shortCode, LocalDate startDate, LocalDate endDate){
+    protected ArrayList<Promo> allPromo = new ArrayList<>();
+    private static DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    final private static Logger logger = Logger.getLogger(Promo.class.getName());
+
+    public Promo(String promoCode, String details, String shortCode, LocalDateTime startDate, LocalDateTime endDate){
         this.promoCode = promoCode;
         this.details = details;
         this.shortCode = shortCode;
@@ -44,46 +51,93 @@ public class Promo {
         this.shortCode = shortCode;
     }
 
-    public LocalDate getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDate getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDate endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 
-    public boolean addPromo(Connection connection){
-        String sqlStatement = "insert into "
-                + "promo(promoCode, details, shortCode, startDate, endDate)"
-                + "values (?,?,?,?,?)";
+    public void addPromo(Connection connection, Promo promo){
+        boolean promoExist = false;
 
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement);
+        retrievePromoData(connection);
 
-            preparedStatement.setString(1, promoCode);
-            preparedStatement.setString(2, details);
-            preparedStatement.setString(3, shortCode);
-            preparedStatement.setString(4, startDate.toString());
-            preparedStatement.setString(5, endDate.toString());
-
-            preparedStatement.executeUpdate();
-            return true;
-        }catch(SQLException sqle) {
-            System.out.println(sqle);
-            return false;
-        }catch(Exception e) {
-            System.out.println(e);
-            return false;
+        for (int index = 0; index < allPromo.size(); index ++) {
+            if(allPromo.get(index).getShortCode().equals(promo.getShortCode())) {
+                System.out.println("Promo already exist");
+                promoExist = true;
+            }
         }
 
+        if(!promoExist){
+            String sqlStatement = "insert into "
+                    + "promo(promoCode, details, shortCode, startDate, endDate)"
+                    + "values (?,?,?,?,?)";
+
+            try {
+                PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement);
+
+                preparedStatement.setString(1, promoCode);
+                preparedStatement.setString(2, details);
+                preparedStatement.setString(3, shortCode);
+                preparedStatement.setString(4, startDate.toString());
+                preparedStatement.setString(5, endDate.toString());
+
+                preparedStatement.executeUpdate();
+                System.out.println("Promo added");
+            }catch(SQLException sqle) {
+                System.out.println(sqle);
+            }catch(Exception e) {
+                System.out.println(e);
+            }
+        }
+
+    }
+
+    public void retrievePromoData(Connection connection){
+        String sqlStatement = "SELECT * FROM promo";
+        Statement statement = null;
+        ResultSet resultSet = null;
+        Promo retrievedPromo;
+
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sqlStatement);
+
+            while(resultSet.next()){
+                retrievedPromo = new Promo(resultSet.getString(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        LocalDateTime.parse(resultSet.getString(4), format),
+                        LocalDateTime.parse(resultSet.getString(5), format));
+
+                allPromo.add(retrievedPromo);
+            }
+
+
+        } catch (SQLException e){
+            logger.log(Level.SEVERE, "SQLException", e);
+        } finally {
+            try{
+                if (statement != null){
+                    statement.close();
+                } if (resultSet != null){
+                    resultSet.close();
+                }
+            } catch (Exception e){
+                logger.log(Level.SEVERE, "ERROR IN CLOSING", e);
+            }
+        }
     }
 
 }

@@ -11,9 +11,9 @@ public class SMS {
     protected String recipient = "";
     protected String sender = "";
     protected String shortCode = "";
-    protected String timeStamp = "";
+    protected LocalDateTime timeStamp;
 
-    public SMS(String msisdn, String recipient, String sender , String shortCode, String timeStamp){
+    public SMS(String msisdn, String recipient, String sender , String shortCode, LocalDateTime timeStamp){
         this.msisdn = msisdn;
         this.recipient = recipient;
         this.sender = sender;
@@ -61,15 +61,15 @@ public class SMS {
         this.transactionID = transactionID;
     }
 
-    public String getTimeStamp() {
+    public LocalDateTime getTimeStamp() {
         return timeStamp;
     }
 
-    public void setTimeStamp(String timeStamp) {
+    public void setTimeStamp(LocalDateTime timeStamp) {
         this.timeStamp = timeStamp;
     }
 
-    public boolean addSMS(Connection connection){
+    public void addSMS(Connection connection){
         String sqlStatement = "insert into "
                 + "sms(msisdn, recipient, sender, shortCode, timeStamp)"
                 + "values (?,?,?,?,?)";
@@ -81,17 +81,14 @@ public class SMS {
             preparedStatement.setString(2, recipient);
             preparedStatement.setString(3, sender);
             preparedStatement.setString(4, shortCode);
-            preparedStatement.setString(5, timeStamp);
+            preparedStatement.setString(5, timeStamp.toString());
 
             preparedStatement.executeUpdate();
-            return true;
+            System.out.println("SMS successfully added to DB");
         }catch(SQLException sqle) {
             System.out.println(sqle);
-            return false;
         }catch(Exception e) {
             System.out.println(e);
-            return false;
         }
-
     }
 }
