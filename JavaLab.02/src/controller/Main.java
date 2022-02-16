@@ -66,7 +66,6 @@ public class Main {
                 LocalDateTime.of(2022, Month.FEBRUARY, 28, 23, 59,59));
 
         promo.addPromo(connection, promo);
----1
 
         //insert 30 SMS for the "PISO PIZZA" promo
         //initial data, to be updated
