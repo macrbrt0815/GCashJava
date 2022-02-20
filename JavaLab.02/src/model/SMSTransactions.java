@@ -157,7 +157,7 @@ public class SMSTransactions implements ManageSMS {
 
         //retrieve shortCode using promoCode
         PromoTransactions promoTransaction = new PromoTransactions();
-        String shortCode = promoTransaction.retrieveShortCode(connection, promoCode);
+        String shortCode = promoTransaction.retrieveShortCodeByPromoCode(connection, promoCode);
 
         //retrieve all sms using retrieved shortCode
         sqlStatement = "SELECT * FROM sms WHERE shortCode = \"" + shortCode + "\"";

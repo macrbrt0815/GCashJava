@@ -14,6 +14,10 @@ public class Promo {
     protected LocalDateTime startDate;
     protected LocalDateTime endDate;
 
+    public Promo(){
+
+    }
+
     public Promo(String promoCode, String details, String shortCode, LocalDateTime startDate, LocalDateTime endDate){
         this.promoCode = promoCode;
         this.details = details;

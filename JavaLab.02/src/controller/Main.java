@@ -27,21 +27,17 @@ public class Main {
     private static PromoTransactions promoTransaction = new PromoTransactions();
     private static ValidateSMS validateSMS = new ValidateSMS();
 
-    private static SMS sms;
-    private static  Promo promo;
+    private static SMS sms = new SMS();
+    private static  Promo promo = new Promo();
 
     private static String transactionID= "";
-
-
 
     public static void main(String[] args) throws IOException {
         //dataPopulatePromo(connection);
         //dataPopulateSMS(connection);
 
         userInput();
-
         SingletonDBConnection.disconnect();
-
 
     }
 
@@ -57,11 +53,12 @@ public class Main {
 
         String confirmation = "";
 
-        do {
-            mobileNumber = Helper.getStringInput("Enter mobile number: ");
-            firstName = Helper.getStringInput("Enter first name: ");
-            lastName = Helper.getStringInput("Enter last name: ");
 
+        mobileNumber = Helper.getStringInput("Enter mobile number: ");
+        firstName = Helper.getStringInput("Enter first name: ");
+        lastName = Helper.getStringInput("Enter last name: ");
+
+        do {
             promoCode = Helper.getStringInput("Enter promo code: ");
             //validate if promoCode exists
             if (validateSMS.validatePromoCode(connection, promoCode)){
@@ -74,22 +71,16 @@ public class Main {
                             confirmation = Helper.getStringInput(("Send \"REGISTER\" to confirm"));
                         }while (!confirmation.equalsIgnoreCase("REGISTER"));
                         //validate sms if successful/ failed
-                        transactionID = sms.generateTransactionID(connection, shortCode);
+                        transactionID = sms.generateTransactionID(connection, promoCode);
                         sms = new SMS (transactionID,
                                 mobileNumber,
                                 "System",
                                 (firstName + " " + lastName),
                                 shortCode,
                                 LocalDateTime.now());
-                        if (validateSMS.SMSChecker(connection, sms)){
-                            //display success
-                            System.out.println("success");
-                        } else {
-                            //display fail
-                            System.out.println("fail");
-                        }
+                        validateSMS.SMSChecker(connection,sms);
                     } else {
-                        logger.log(Level.INFO, "Incorrect promoCode/ shortCode");
+                        logger.log(Level.INFO, "Promo code and Short code didn't match");
                     }
                 } else {
                     logger.log(Level.INFO, shortCode + " shortCode doesn't exist");

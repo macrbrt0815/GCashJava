@@ -4,6 +4,8 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -120,7 +122,7 @@ public class PromoTransactions implements ManagePromo {
     }
 
     @Override //retrieve a promoCode from database using
-    public String retrievePromoCode(Connection connection, String shortCode) {
+    public String retrievePromoCodeByShortCode(Connection connection, String shortCode) {
         String promoCode = "";
         isPromoEmpty = false;
         sqlStatement = "SELECT promoCode FROM promo WHERE shortCode = \"" + shortCode + "\"";
@@ -149,7 +151,7 @@ public class PromoTransactions implements ManagePromo {
             }
         }
         if (isPromoEmpty){
-            logger.log(Level.INFO, "No promo with " + shortCode + " shotCode.");
+            logger.log(Level.INFO, "No promo with " + shortCode + " shortCode.");
             return null;
         } else {
             return promoCode;
@@ -157,7 +159,7 @@ public class PromoTransactions implements ManagePromo {
     }
 
     @Override
-    public String retrieveShortCode(Connection connection, String promoCode) {
+    public String retrieveShortCodeByPromoCode(Connection connection, String promoCode) {
         String shortCode = "";
         isPromoEmpty = false;
         sqlStatement = "SELECT shortCode FROM promo WHERE promoCode = \"" + promoCode + "\"";
@@ -191,5 +193,37 @@ public class PromoTransactions implements ManagePromo {
         } else {
             return shortCode;
         }
+    }
+
+    @Override
+    public Map retrievePromoStartEndDates(Connection connection, String shortCode) {
+        Map<String, String> dates = new HashMap<>();
+        //retrieve all promo
+        sqlStatement = "SELECT startDate, endDate FROM promo WHERE shortCode = \"" + shortCode +"\"";
+
+
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sqlStatement);
+
+            while (resultSet.next()) {
+                dates.put("startDate", resultSet.getString("startDate"));
+                dates.put("endDate", resultSet.getString("endDate"));
+            }
+
+        } catch (SQLException sqle){
+            logger.log(Level.SEVERE, "SQLException", sqle);
+        } finally {
+            try{
+                if (statement != null){
+                    statement.close();
+                } if (resultSet != null){
+                    resultSet.close();
+                }
+            } catch (Exception e){
+                logger.log(Level.SEVERE, "ERROR IN CLOSING", e);
+            }
+        }
+        return dates;
     }
 }
