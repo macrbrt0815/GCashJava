@@ -1,9 +1,11 @@
 package model;
 
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class SMS {
     protected String transactionID = "";
@@ -13,7 +15,12 @@ public class SMS {
     protected String shortCode = "";
     protected LocalDateTime timeStamp;
 
-    public SMS(String msisdn, String recipient, String sender , String shortCode, LocalDateTime timeStamp){
+    public SMS(){
+
+    }
+
+    public SMS(String transactionID, String msisdn, String recipient, String sender , String shortCode, LocalDateTime timeStamp){
+        this.transactionID = transactionID;
         this.msisdn = msisdn;
         this.recipient = recipient;
         this.sender = sender;
@@ -69,26 +76,32 @@ public class SMS {
         this.timeStamp = timeStamp;
     }
 
-    public void addSMS(Connection connection){
-        String sqlStatement = "insert into "
-                + "sms(msisdn, recipient, sender, shortCode, timeStamp)"
-                + "values (?,?,?,?,?)";
+    public String generateTransactionID(Connection connection, String shortCode){
+        //retrieve promo code using shortcode
+        PromoTransactions promoTransaction = new PromoTransactions();
+        String promoCode = promoTransaction.retrievePromoCode(connection, shortCode);
 
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement);
+        //retrieve all sms in the db with the given shortcode
+        SMSTransactions smsTransaction = new SMSTransactions();
+        ArrayList transactionList  = smsTransaction.retrieveSMSPromoCode(connection, promoCode);
 
-            preparedStatement.setString(1, msisdn);
-            preparedStatement.setString(2, recipient);
-            preparedStatement.setString(3, sender);
-            preparedStatement.setString(4, shortCode);
-            preparedStatement.setString(5, timeStamp.toString());
-
-            preparedStatement.executeUpdate();
-            System.out.println("SMS successfully added to DB");
-        }catch(SQLException sqle) {
-            System.out.println(sqle);
-        }catch(Exception e) {
-            System.out.println(e);
+        //return promocode + size of transaction list + 1 (transactionID format)
+        if (transactionList != null){
+            return (promoCode + " " + String.valueOf(transactionList.size() + 1));
+        } else {
+            return (promoCode + " 1");
         }
+    }
+
+    @Override
+    public String toString() {
+        return "SMS{" +
+                "transactionID='" + this.transactionID + '\'' +
+                ", msisdn='" + this.msisdn + '\'' +
+                ", recipient='" + this.recipient + '\'' +
+                ", sender='" + this.sender + '\'' +
+                ", shortCode='" + this.shortCode + '\'' +
+                ", timeStamp=" + this.timeStamp +
+                '}';
     }
 }

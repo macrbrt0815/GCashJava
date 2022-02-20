@@ -14,11 +14,6 @@ public class Promo {
     protected LocalDateTime startDate;
     protected LocalDateTime endDate;
 
-    protected ArrayList<Promo> allPromo = new ArrayList<>();
-    private static DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-    final private static Logger logger = Logger.getLogger(Promo.class.getName());
-
     public Promo(String promoCode, String details, String shortCode, LocalDateTime startDate, LocalDateTime endDate){
         this.promoCode = promoCode;
         this.details = details;
@@ -68,39 +63,6 @@ public class Promo {
     }
 
     public void addPromo(Connection connection, Promo promo){
-        boolean promoExist = false;
-
-        retrievePromoData(connection);
-
-        for (int index = 0; index < allPromo.size(); index ++) {
-            if(allPromo.get(index).getShortCode().equals(promo.getShortCode())) {
-                System.out.println("Promo already exist");
-                promoExist = true;
-            }
-        }
-
-        if(!promoExist){
-            String sqlStatement = "insert into "
-                    + "promo(promoCode, details, shortCode, startDate, endDate)"
-                    + "values (?,?,?,?,?)";
-
-            try {
-                PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement);
-
-                preparedStatement.setString(1, promoCode);
-                preparedStatement.setString(2, details);
-                preparedStatement.setString(3, shortCode);
-                preparedStatement.setString(4, startDate.toString());
-                preparedStatement.setString(5, endDate.toString());
-
-                preparedStatement.executeUpdate();
-                System.out.println("Promo added");
-            }catch(SQLException sqle) {
-                System.out.println(sqle);
-            }catch(Exception e) {
-                System.out.println(e);
-            }
-        }
 
     }
 
@@ -109,35 +71,6 @@ public class Promo {
         Statement statement = null;
         ResultSet resultSet = null;
         Promo retrievedPromo;
-
-        try {
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(sqlStatement);
-
-            while(resultSet.next()){
-                retrievedPromo = new Promo(resultSet.getString(1),
-                        resultSet.getString(2),
-                        resultSet.getString(3),
-                        LocalDateTime.parse(resultSet.getString(4), format),
-                        LocalDateTime.parse(resultSet.getString(5), format));
-
-                allPromo.add(retrievedPromo);
-            }
-
-
-        } catch (SQLException e){
-            logger.log(Level.SEVERE, "SQLException", e);
-        } finally {
-            try{
-                if (statement != null){
-                    statement.close();
-                } if (resultSet != null){
-                    resultSet.close();
-                }
-            } catch (Exception e){
-                logger.log(Level.SEVERE, "ERROR IN CLOSING", e);
-            }
-        }
     }
 
 }
