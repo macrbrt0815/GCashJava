@@ -1,9 +1,13 @@
 package model;
 
-public interface SMSValidator {
-    void SMSChecker();
+import java.sql.Connection;
 
-    void validatePromoCode();
-    void validateshortCode();
+public interface SMSValidator {
+    boolean SMSChecker(Connection connection, SMS sms);
+
+    boolean validatePromoCode(Connection connection, String promoCode);
+    boolean validateShortCode(Connection connection, String promoCode);
+
+    boolean validatePromoShortCode(Connection connection, String promoCode, String shortCode);
 
 }

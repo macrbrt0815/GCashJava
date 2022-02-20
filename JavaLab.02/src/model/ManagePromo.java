@@ -3,7 +3,7 @@ package model;
 import java.sql.Connection;
 import java.util.ArrayList;
 
-public interface managePromo {
+public interface ManagePromo {
     void insertPromo(Connection connection, Promo promo);
     ArrayList retrievePromo(Connection connection);
     String retrievePromoCode(Connection connection, String shortCode);

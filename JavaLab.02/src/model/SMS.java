@@ -76,11 +76,7 @@ public class SMS {
         this.timeStamp = timeStamp;
     }
 
-    public String generateTransactionID(Connection connection, String shortCode){
-        //retrieve promo code using shortcode
-        PromoTransactions promoTransaction = new PromoTransactions();
-        String promoCode = promoTransaction.retrievePromoCode(connection, shortCode);
-
+    public String generateTransactionID(Connection connection, String promoCode){
         //retrieve all sms in the db with the given shortcode
         SMSTransactions smsTransaction = new SMSTransactions();
         ArrayList transactionList  = smsTransaction.retrieveSMSPromoCode(connection, promoCode);

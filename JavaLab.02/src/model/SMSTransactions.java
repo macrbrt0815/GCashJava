@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class SMSTransactions implements manageSMS {
+public class SMSTransactions implements ManageSMS {
     final private static DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     final private static Logger logger = Logger.getLogger(SMSTransactions.class.getName());
 

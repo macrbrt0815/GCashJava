@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class PromoTransactions implements managePromo{
+public class PromoTransactions implements ManagePromo {
     final private static DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     final private static Logger logger = Logger.getLogger(PromoTransactions.class.getName());
 

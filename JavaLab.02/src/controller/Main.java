@@ -1,12 +1,13 @@
 package controller;
 
-import model.Promo;
-import model.PromoTransactions;
-import model.SMS;
-import model.SMSTransactions;
+import model.*;
 import utility.DBConnection;
+import utility.Helper;
 import utility.SingletonDBConnection;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,6 +25,7 @@ public class Main {
     private static Connection connection = SingletonDBConnection.getConnection();
     private static SMSTransactions smsTransaction = new SMSTransactions();
     private static PromoTransactions promoTransaction = new PromoTransactions();
+    private static ValidateSMS validateSMS = new ValidateSMS();
 
     private static SMS sms;
     private static  Promo promo;
@@ -32,11 +34,72 @@ public class Main {
 
 
 
-    public static void main(String[] args) {
-        dataPopulatePromo(connection);
-        dataPopulateSMS(connection);
+    public static void main(String[] args) throws IOException {
+        //dataPopulatePromo(connection);
+        //dataPopulateSMS(connection);
+
+        userInput();
 
         SingletonDBConnection.disconnect();
+
+
+    }
+
+    public static void userInput() throws IOException {
+        String choice = "";
+
+        String mobileNumber = "";
+        String firstName = "";
+        String lastName = "";
+
+        String promoCode = "";
+        String shortCode = "";
+
+        String confirmation = "";
+
+        do {
+            mobileNumber = Helper.getStringInput("Enter mobile number: ");
+            firstName = Helper.getStringInput("Enter first name: ");
+            lastName = Helper.getStringInput("Enter last name: ");
+
+            promoCode = Helper.getStringInput("Enter promo code: ");
+            //validate if promoCode exists
+            if (validateSMS.validatePromoCode(connection, promoCode)){
+                shortCode = Helper.getStringInput("Enter short code: ");
+                //validate if shortCode exists
+                if (validateSMS.validateShortCode(connection, shortCode)){
+                    //validate if correct promoCode and shortCode
+                    if (validateSMS.validatePromoShortCode(connection, promoCode, shortCode)){
+                        do{
+                            confirmation = Helper.getStringInput(("Send \"REGISTER\" to confirm"));
+                        }while (!confirmation.equalsIgnoreCase("REGISTER"));
+                        //validate sms if successful/ failed
+                        transactionID = sms.generateTransactionID(connection, shortCode);
+                        sms = new SMS (transactionID,
+                                mobileNumber,
+                                "System",
+                                (firstName + " " + lastName),
+                                shortCode,
+                                LocalDateTime.now());
+                        if (validateSMS.SMSChecker(connection, sms)){
+                            //display success
+                            System.out.println("success");
+                        } else {
+                            //display fail
+                            System.out.println("fail");
+                        }
+                    } else {
+                        logger.log(Level.INFO, "Incorrect promoCode/ shortCode");
+                    }
+                } else {
+                    logger.log(Level.INFO, shortCode + " shortCode doesn't exist");
+                }
+            } else {
+                logger.log(Level.INFO, promoCode + " promoCode doesn't exist");
+            }
+
+            choice = Helper.getStringInput("Do you want to try again? [YES/NO]: ");
+        } while (choice.equalsIgnoreCase("YES"));
 
 
     }

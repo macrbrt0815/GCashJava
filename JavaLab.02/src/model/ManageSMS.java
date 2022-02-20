@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public interface manageSMS {
+public interface ManageSMS {
 
     void insertSMS(Connection connection, SMS sms);
     ArrayList retrieveSMS(Connection connection);
