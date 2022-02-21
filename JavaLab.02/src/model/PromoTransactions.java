@@ -1,5 +1,7 @@
 package model;
 
+import utility.SingletonDBConnection;
+
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -10,8 +12,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class PromoTransactions implements ManagePromo {
+    final private static Logger logger = Logger.getLogger(SMSTransactions.class.getName());
     final private static DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    final private static Logger logger = Logger.getLogger(PromoTransactions.class.getName());
+
+    private static Connection connection = SingletonDBConnection.getConnection();
 
     //collection of all the retrieved Promos
     protected ArrayList<Promo> allPromo = new ArrayList<>();
@@ -23,11 +27,11 @@ public class PromoTransactions implements ManagePromo {
     Promo retrievedPromo;
 
     @Override //insert a promo into database
-    public  void insertPromo(Connection connection, Promo promo) {
+    public  void insertPromo(Promo promo) {
         boolean promoExist = false;
 
         //retrieve all promo in the database
-        retrievePromo(connection);
+        retrievePromo();
 
         //loop through all promos, verify if promo is already in the database
         //verify using promoCode and shortCode
@@ -57,7 +61,7 @@ public class PromoTransactions implements ManagePromo {
                 preparedStatement.setString(5, promo.getEndDate().toString());
 
                 preparedStatement.executeUpdate();
-                logger.log(Level.INFO, "Promo added");
+                logger.log(Level.INFO, "Promo " + promo.getPromoCode() + " added.");
 
             } catch (SQLException sqle){
                 logger.log(Level.SEVERE, "SQLException", sqle);
@@ -76,8 +80,11 @@ public class PromoTransactions implements ManagePromo {
     }
 
     @Override //retrieve ALL promos from database
-    public ArrayList retrievePromo(Connection connection) {
-        isPromoEmpty = false;
+    public ArrayList retrievePromo() {
+
+        //empty allPromo ArrayList
+        allPromo.clear();
+        isPromoEmpty = true;
 
         //retrieve all promo
         sqlStatement = "SELECT * FROM promo";
@@ -86,20 +93,16 @@ public class PromoTransactions implements ManagePromo {
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sqlStatement);
 
-            if(!resultSet.next()){
-                isPromoEmpty = true;
-            } else {
-                while (resultSet.next()) {
-                    retrievedPromo = new Promo(resultSet.getString("promoCode"),
-                            resultSet.getString("details"),
-                            resultSet.getString("shortCode"),
-                            LocalDateTime.parse(resultSet.getString("startDate"), format),
-                            LocalDateTime.parse(resultSet.getString("endDate"), format));
+            while (resultSet.next()) {
+                isPromoEmpty = false;
+                retrievedPromo = new Promo(resultSet.getString("promoCode"),
+                        resultSet.getString("details"),
+                        resultSet.getString("shortCode"),
+                        LocalDateTime.parse(resultSet.getString("startDate"), format),
+                        LocalDateTime.parse(resultSet.getString("endDate"), format));
 
-                    allPromo.add(retrievedPromo);
-                }
+                allPromo.add(retrievedPromo);
             }
-
         } catch (SQLException sqle){
             logger.log(Level.SEVERE, "SQLException", sqle);
         } finally {
@@ -122,7 +125,7 @@ public class PromoTransactions implements ManagePromo {
     }
 
     @Override //retrieve a promoCode from database using
-    public String retrievePromoCodeByShortCode(Connection connection, String shortCode) {
+    public String retrievePromoCodeByShortCode(String shortCode) {
         String promoCode = "";
         isPromoEmpty = false;
         sqlStatement = "SELECT promoCode FROM promo WHERE shortCode = \"" + shortCode + "\"";
@@ -159,7 +162,7 @@ public class PromoTransactions implements ManagePromo {
     }
 
     @Override
-    public String retrieveShortCodeByPromoCode(Connection connection, String promoCode) {
+    public String retrieveShortCodeByPromoCode(String promoCode) {
         String shortCode = "";
         isPromoEmpty = false;
         sqlStatement = "SELECT shortCode FROM promo WHERE promoCode = \"" + promoCode + "\"";
@@ -196,7 +199,7 @@ public class PromoTransactions implements ManagePromo {
     }
 
     @Override
-    public Map retrievePromoStartEndDates(Connection connection, String shortCode) {
+    public Map retrievePromoStartEndDates(String shortCode) {
         Map<String, String> dates = new HashMap<>();
         //retrieve all promo
         sqlStatement = "SELECT startDate, endDate FROM promo WHERE shortCode = \"" + shortCode +"\"";

@@ -1,5 +1,7 @@
 package model;
 
+import utility.SingletonDBConnection;
+
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -8,9 +10,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class SMSTransactions implements ManageSMS {
-    final private static DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     final private static Logger logger = Logger.getLogger(SMSTransactions.class.getName());
+    final private static DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
+    private static Connection connection = SingletonDBConnection.getConnection();
+
+    //collection of all the retrieved SMS
     protected ArrayList<SMS> allSMS = new ArrayList<>();
 
     String sqlStatement = "";
@@ -20,9 +25,9 @@ public class SMSTransactions implements ManageSMS {
     SMS retrievedSMS;
 
     @Override //insert sms into database
-    public void insertSMS(Connection connection, SMS sms) {
+    public void insertSMS(SMS sms, boolean isSuccessful) {
          sqlStatement = "INSERT INTO "
-                + "sms(transactionID, msisdn, recipient, sender, shortCode, timeStamp, isSucessful)"
+                + "sms(transactionID, msisdn, recipient, sender, shortCode, timeStamp, isSuccessful)"
                 + "values (?,?,?,?,?,?,?)";
 
         try {
@@ -34,10 +39,10 @@ public class SMSTransactions implements ManageSMS {
             preparedStatement.setString(4, sms.getSender());
             preparedStatement.setString(5, sms.getShortCode());
             preparedStatement.setString(6, sms.getTimeStamp().toString());
-            preparedStatement.setBoolean(7, true);
+            preparedStatement.setBoolean(7, isSuccessful);
 
             preparedStatement.executeUpdate();
-            logger.log(Level.INFO, "SMS added");
+            logger.log(Level.INFO, "SMS " + sms.getTransactionID() + " added.");
 
         } catch (SQLException sqle){
             logger.log(Level.SEVERE, "SQLException", sqle);
@@ -55,11 +60,11 @@ public class SMSTransactions implements ManageSMS {
     }
 
     @Override //retrieve ALL SMS from database
-    public ArrayList retrieveSMS(Connection connection) {
-        isSMSEmpty = true;
+    public ArrayList retrieveSMS() {
 
         //empty allSMS ArrayList
         allSMS.clear();
+        isSMSEmpty = true;
 
         //retrieve all SMS
         sqlStatement = "SELECT * FROM sms";
@@ -103,11 +108,11 @@ public class SMSTransactions implements ManageSMS {
     }
 
     @Override //retrieve SMS between given startDate and endDate
-    public ArrayList retrieveSMSStartEndDate(Connection connection, LocalDateTime startDate, LocalDateTime endDate) {
-        isSMSEmpty = true;
+    public ArrayList retrieveSMSStartEndDate(LocalDateTime startDate, LocalDateTime endDate) {
 
         //empty allSMS ArrayList
         allSMS.clear();
+        isSMSEmpty = true;
 
         //retrieve all sms between startDate and endDate
         sqlStatement = "SELECT * FROM sms WHERE timeStamp BETWEEN \"" + startDate + "\" AND \"" + endDate + "\"";
@@ -149,15 +154,15 @@ public class SMSTransactions implements ManageSMS {
     }
 
     @Override //retrieve SMS using promoCode
-    public ArrayList retrieveSMSPromoCode(Connection connection, String promoCode) {
-        isSMSEmpty = true;
+    public ArrayList retrieveSMSPromoCode(String promoCode) {
 
         //empty allSMS ArrayList
         allSMS.clear();
+        isSMSEmpty = true;
 
         //retrieve shortCode using promoCode
         PromoTransactions promoTransaction = new PromoTransactions();
-        String shortCode = promoTransaction.retrieveShortCodeByPromoCode(connection, promoCode);
+        String shortCode = promoTransaction.retrieveShortCodeByPromoCode(promoCode);
 
         //retrieve all sms using retrieved shortCode
         sqlStatement = "SELECT * FROM sms WHERE shortCode = \"" + shortCode + "\"";
@@ -199,11 +204,11 @@ public class SMSTransactions implements ManageSMS {
     }
 
     @Override //retrieve sms using msisdn
-    public ArrayList retrieveSMSMSISDN(Connection connection, String msisdn) {
-        isSMSEmpty = true;
+    public ArrayList retrieveSMSMSISDN(String msisdn) {
 
         //empty allSMS ArrayList
         allSMS.clear();
+        isSMSEmpty = true;
 
         //retrieve SMS using msisdn
         String sqlStatement = "SELECT * FROM sms WHERE msisdn = \"" + msisdn + "\"";

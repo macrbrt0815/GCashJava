@@ -6,12 +6,12 @@ import java.util.ArrayList;
 
 public interface ManageSMS {
 
-    void insertSMS(Connection connection, SMS sms);
-    ArrayList retrieveSMS(Connection connection);
+    void insertSMS(SMS sms, boolean isSuccessful);
+    ArrayList retrieveSMS();
 
-    ArrayList retrieveSMSStartEndDate(Connection connection, LocalDateTime startDate, LocalDateTime endDate);
-    ArrayList retrieveSMSPromoCode(Connection connection, String shortCode);
-    ArrayList retrieveSMSMSISDN(Connection connection, String msisdn);
+    ArrayList retrieveSMSStartEndDate(LocalDateTime startDate, LocalDateTime endDate);
+    ArrayList retrieveSMSPromoCode(String shortCode);
+    ArrayList retrieveSMSMSISDN(String msisdn);
 
     ArrayList retrieveSMSBySystem();
     ArrayList retrieveSMSToSystem();
