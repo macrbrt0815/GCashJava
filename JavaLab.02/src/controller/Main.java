@@ -1,11 +1,11 @@
 package controller;
 
+import View.Display;
 import model.*;
 import utility.Helper;
 import utility.SingletonDBConnection;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
@@ -13,24 +13,52 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Main {
-    final private static DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    final private static Logger logger = Logger.getLogger(SMSTransactions.class.getName());
-    private static SMSTransactions smsTransaction = new SMSTransactions();
-    private static PromoTransactions promoTransaction = new PromoTransactions();
-    private static ValidateSMS validateSMS = new ValidateSMS();
+    final private static Logger logger = Logger.getLogger(Main.class.getName());
 
-    private static SMS sms = new SMS();
-    private static  Promo promo = new Promo();
+    static SMSTransactions smsTransaction = new SMSTransactions();
+    static PromoTransactions promoTransaction = new PromoTransactions();
+    static ValidateSMS validateSMS = new ValidateSMS();
+    static Display display = new Display();
 
-    private static String transactionID= "";
+    static SMS sms = new SMS();
+    static Promo promo = new Promo();
+
+    static String transactionID= "";
 
     public static void main(String[] args) throws IOException {
         //dataPopulatePromo();
         //dataPopulateSMS();
 
         userInput();
-        SingletonDBConnection.disconnect();
 
+/*
+        //retrieve all sms
+        display.displaySMS(smsTransaction.retrieveSMS());
+
+        //retrieve sms by start and end dates
+        LocalDateTime startDate = null; //specify start date
+        LocalDateTime endDate = null; //specify end date
+        display.displaySMS(smsTransaction.retrieveSMSStartEndDate(startDate, endDate));
+
+        //retrieve sms by promo code
+        String promoCode = "";
+        display.displaySMS(smsTransaction.retrieveSMSPromoCode(promoCode));
+
+        //retrieve sms by msisdn
+        String msisdn = "";
+        display.displaySMS(smsTransaction.retrieveSMSMSISDN(msisdn));
+
+        //retrieve sms sent to system
+        display.displaySMS(smsTransaction.retrieveSMSToSystem());
+
+        //retrieve sms sent by system
+        display.displaySMS(smsTransaction.retrieveSMSBySystem());
+
+        //retrieve all promos
+        display.displayPromo(promoTransaction.retrievePromo());
+
+        SingletonDBConnection.disconnect();
+*/
     }
 
     public static void userInput() throws IOException {
@@ -83,17 +111,8 @@ public class Main {
 
             choice = Helper.getStringInput("Do you want to try again? [YES/NO]: ");
         } while (choice.equalsIgnoreCase("YES"));
-
-
+        logger.log(Level.INFO, "Program Terminating ...");
     }
-/*
-    public void smsChecker(Map<String, String> sms){
-        // not final implementation
-        logger.log(Level.INFO, "Mobile Number: " + sms.get("mobileNumber"));
-        logger.log(Level.INFO, "Message: " + sms.get("message"));
-        logger.log(Level.INFO, "Short Code: " + sms.get("shortCode"));
-    }
-*/
 
     public static void dataPopulatePromo() {
         //Insert promo
@@ -122,7 +141,7 @@ public class Main {
                 "Less Php 150, minimum spent of 700. " +
                         "Valid from February 12 - February 28, 2022.",
                 "150Off",
-                LocalDateTime.of(2022, Month.FEBRUARY, 1, 0, 0, 0),
+                LocalDateTime.of(2022, Month.FEBRUARY, 12, 0, 0, 0),
                 LocalDateTime.of(2022, Month.FEBRUARY, 28, 23, 59, 59));
 
         promoTransaction.insertPromo(promo);

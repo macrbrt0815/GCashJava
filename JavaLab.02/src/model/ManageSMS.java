@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public interface ManageSMS {
 
     void insertSMS(SMS sms, boolean isSuccessful);
+
     ArrayList retrieveSMS();
 
     ArrayList retrieveSMSStartEndDate(LocalDateTime startDate, LocalDateTime endDate);

@@ -12,10 +12,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class PromoTransactions implements ManagePromo {
-    final private static Logger logger = Logger.getLogger(SMSTransactions.class.getName());
+    final private static Logger logger = Logger.getLogger(PromoTransactions.class.getName());
     final private static DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    private static Connection connection = SingletonDBConnection.getConnection();
+    Connection connection = SingletonDBConnection.getConnection();
 
     //collection of all the retrieved Promos
     protected ArrayList<Promo> allPromo = new ArrayList<>();
@@ -61,7 +61,7 @@ public class PromoTransactions implements ManagePromo {
                 preparedStatement.setString(5, promo.getEndDate().toString());
 
                 preparedStatement.executeUpdate();
-                logger.log(Level.INFO, "Promo " + promo.getPromoCode() + " added.");
+                logger.log(Level.INFO, "Promo [" + promo.getPromoCode() + "] added.");
 
             } catch (SQLException sqle){
                 logger.log(Level.SEVERE, "SQLException", sqle);
@@ -127,6 +127,7 @@ public class PromoTransactions implements ManagePromo {
     @Override //retrieve a promoCode from database using
     public String retrievePromoCodeByShortCode(String shortCode) {
         String promoCode = "";
+
         isPromoEmpty = false;
         sqlStatement = "SELECT promoCode FROM promo WHERE shortCode = \"" + shortCode + "\"";
 
@@ -164,6 +165,7 @@ public class PromoTransactions implements ManagePromo {
     @Override
     public String retrieveShortCodeByPromoCode(String promoCode) {
         String shortCode = "";
+
         isPromoEmpty = false;
         sqlStatement = "SELECT shortCode FROM promo WHERE promoCode = \"" + promoCode + "\"";
 
@@ -200,7 +202,8 @@ public class PromoTransactions implements ManagePromo {
 
     @Override
     public Map retrievePromoStartEndDates(String shortCode) {
-        Map<String, String> dates = new HashMap<>();
+        Map dates = new HashMap();
+
         //retrieve all promo
         sqlStatement = "SELECT startDate, endDate FROM promo WHERE shortCode = \"" + shortCode +"\"";
 

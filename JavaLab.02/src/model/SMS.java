@@ -1,9 +1,5 @@
 package model;
 
-import java.sql.Array;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -16,7 +12,6 @@ public class SMS {
     protected LocalDateTime timeStamp;
 
     public SMS(){
-
     }
 
     public SMS(String transactionID, String msisdn, String recipient, String sender , String shortCode, LocalDateTime timeStamp){
@@ -81,7 +76,7 @@ public class SMS {
         SMSTransactions smsTransaction = new SMSTransactions();
         ArrayList transactionList  = smsTransaction.retrieveSMSPromoCode(promoCode);
 
-        //return promocode + size of transaction list + 1 (transactionID format)
+        //return promoCode + size of transaction list + 1 (transactionID format)
         if (transactionList != null){
             return (promoCode + " " + String.valueOf(transactionList.size() + 1));
         } else {
@@ -91,13 +86,12 @@ public class SMS {
 
     @Override
     public String toString() {
-        return "SMS{" +
-                "transactionID='" + this.transactionID + '\'' +
-                ", msisdn='" + this.msisdn + '\'' +
-                ", recipient='" + this.recipient + '\'' +
-                ", sender='" + this.sender + '\'' +
-                ", shortCode='" + this.shortCode + '\'' +
-                ", timeStamp=" + this.timeStamp +
-                '}';
+        return "SMS" +
+                "\nTransaction ID: " + this.transactionID +
+                "\nMSISDN: " + this.msisdn +
+                "\nRecipient: " + this.recipient +
+                "\nSender: " + this.sender +
+                "\nShort Code: " + this.shortCode +
+                "\nTime Stamp: " + this.timeStamp;
     }
 }

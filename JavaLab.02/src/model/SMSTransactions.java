@@ -13,7 +13,7 @@ public class SMSTransactions implements ManageSMS {
     final private static Logger logger = Logger.getLogger(SMSTransactions.class.getName());
     final private static DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    private static Connection connection = SingletonDBConnection.getConnection();
+    Connection connection = SingletonDBConnection.getConnection();
 
     //collection of all the retrieved SMS
     protected ArrayList<SMS> allSMS = new ArrayList<>();
@@ -42,7 +42,7 @@ public class SMSTransactions implements ManageSMS {
             preparedStatement.setBoolean(7, isSuccessful);
 
             preparedStatement.executeUpdate();
-            logger.log(Level.INFO, "SMS " + sms.getTransactionID() + " added.");
+            logger.log(Level.INFO, "SMS [" + sms.getTransactionID() + "] added.");
 
         } catch (SQLException sqle){
             logger.log(Level.SEVERE, "SQLException", sqle);
@@ -86,8 +86,8 @@ public class SMSTransactions implements ManageSMS {
             }
 
 
-        } catch (SQLException e){
-            logger.log(Level.SEVERE, "SQLException", e);
+        } catch (SQLException sqle){
+            logger.log(Level.SEVERE, "SQLException", sqle);
         } finally {
             try{
                 if (statement != null){
@@ -182,8 +182,8 @@ public class SMSTransactions implements ManageSMS {
 
                 allSMS.add(retrievedSMS);
             }
-        } catch (SQLException e){
-            logger.log(Level.SEVERE, "SQLException", e);
+        } catch (SQLException sqle){
+            logger.log(Level.SEVERE, "SQLException", sqle);
         } finally {
             try{
                 if (statement != null){
@@ -211,7 +211,7 @@ public class SMSTransactions implements ManageSMS {
         isSMSEmpty = true;
 
         //retrieve SMS using msisdn
-        String sqlStatement = "SELECT * FROM sms WHERE msisdn = \"" + msisdn + "\"";
+        sqlStatement = "SELECT * FROM sms WHERE msisdn = \"" + msisdn + "\"";
 
         try {
             statement = connection.createStatement();
@@ -229,8 +229,8 @@ public class SMSTransactions implements ManageSMS {
                 allSMS.add(retrievedSMS);
             }
 
-        } catch (SQLException e){
-            logger.log(Level.SEVERE, "SQLException", e);
+        } catch (SQLException sqle){
+            logger.log(Level.SEVERE, "SQLException", sqle);
         } finally {
             try{
                 if (statement != null){
@@ -252,12 +252,94 @@ public class SMSTransactions implements ManageSMS {
 
     @Override
     public ArrayList retrieveSMSBySystem() {
-        return null;
+        //empty allSMS ArrayList
+        allSMS.clear();
+        isSMSEmpty = true;
+
+        //retrieve SMS using msisdn
+        sqlStatement = "SELECT * FROM sms WHERE sender = \"System\"";
+
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sqlStatement);
+
+            while (resultSet.next()) {
+                isSMSEmpty = false;
+                retrievedSMS = new SMS(resultSet.getString(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getString(4),
+                        resultSet.getString(5),
+                        LocalDateTime.parse(resultSet.getString(6), format));
+
+                allSMS.add(retrievedSMS);
+            }
+
+        } catch (SQLException sqle){
+            logger.log(Level.SEVERE, "SQLException", sqle);
+        } finally {
+            try{
+                if (statement != null){
+                    statement.close();
+                } if (resultSet != null){
+                    resultSet.close();
+                }
+            } catch (Exception e){
+                logger.log(Level.SEVERE, "ERROR IN CLOSING", e);
+            }
+        }
+        if (isSMSEmpty){
+            logger.log(Level.INFO, "No SMS sent by System");
+            return null;
+        } else {
+            return allSMS;
+        }
     }
 
     @Override
     public ArrayList retrieveSMSToSystem() {
-        return null;
+        //empty allSMS ArrayList
+        allSMS.clear();
+        isSMSEmpty = true;
+
+        //retrieve SMS using msisdn
+        sqlStatement = "SELECT * FROM sms WHERE recipient = \"System\"";
+
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sqlStatement);
+
+            while (resultSet.next()) {
+                isSMSEmpty = false;
+                retrievedSMS = new SMS(resultSet.getString(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getString(4),
+                        resultSet.getString(5),
+                        LocalDateTime.parse(resultSet.getString(6), format));
+
+                allSMS.add(retrievedSMS);
+            }
+
+        } catch (SQLException sqle){
+            logger.log(Level.SEVERE, "SQLException", sqle);
+        } finally {
+            try{
+                if (statement != null){
+                    statement.close();
+                } if (resultSet != null){
+                    resultSet.close();
+                }
+            } catch (Exception e){
+                logger.log(Level.SEVERE, "ERROR IN CLOSING", e);
+            }
+        }
+        if (isSMSEmpty){
+            logger.log(Level.INFO, "No SMS sent to System");
+            return null;
+        } else {
+            return allSMS;
+        }
     }
 }
 

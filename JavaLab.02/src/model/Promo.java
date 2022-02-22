@@ -1,11 +1,7 @@
 package model;
 
-import java.sql.*;
+
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Promo {
     protected String promoCode = "";
@@ -15,7 +11,6 @@ public class Promo {
     protected LocalDateTime endDate;
 
     public Promo(){
-
     }
 
     public Promo(String promoCode, String details, String shortCode, LocalDateTime startDate, LocalDateTime endDate){
@@ -66,15 +61,13 @@ public class Promo {
         this.endDate = endDate;
     }
 
-    public void addPromo(Connection connection, Promo promo){
-
+    @Override
+    public String toString() {
+        return "PROMO" +
+                "\nPromo Code: " + promoCode +
+                "\nDetails: " + details +
+                "\nShort Code: " + shortCode +
+                "\nStart Date: " + startDate +
+                "\nEnd Date: " + endDate;
     }
-
-    public void retrievePromoData(Connection connection){
-        String sqlStatement = "SELECT * FROM promo";
-        Statement statement = null;
-        ResultSet resultSet = null;
-        Promo retrievedPromo;
-    }
-
 }
