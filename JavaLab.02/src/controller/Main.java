@@ -41,11 +41,11 @@ public class Main {
         display.displaySMS(smsTransaction.retrieveSMSStartEndDate(startDate, endDate));
 
         //retrieve sms by promo code
-        String promoCode = "";
+        String promoCode = "PISO PIZZA";
         display.displaySMS(smsTransaction.retrieveSMSPromoCode(promoCode));
 
         //retrieve sms by msisdn
-        String msisdn = "";
+        String msisdn = "123";
         display.displaySMS(smsTransaction.retrieveSMSMSISDN(msisdn));
 
         //retrieve sms sent to system
@@ -56,9 +56,9 @@ public class Main {
 
         //retrieve all promos
         display.displayPromo(promoTransaction.retrievePromo());
-
-        SingletonDBConnection.disconnect();
 */
+        SingletonDBConnection.disconnect();
+
     }
 
     public static void userInput() throws IOException {
@@ -150,14 +150,6 @@ public class Main {
 
     public static void dataPopulateSMS(){
         //insert 30 SMS for the "PISO PIZZA" promo
-        //initial data, to be updated
-        sms = new SMS("test",
-                "msisdn " ,
-                "recipient ",
-                "sender " ,
-                "1Pizza",
-                LocalDateTime.now());
-
         //smsTransaction.insertSMS(connection,sms);
         for(int index = 0; index < 30; index++){
             transactionID = sms.generateTransactionID("PISO PIZZA");
