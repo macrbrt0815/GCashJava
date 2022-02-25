@@ -462,6 +462,8 @@ public class SMSTransactions implements ManageSMS {
             generateAllTransactions.write("\r\n"); // line breaker
             generateAllTransactions.write("Total Sent SMS: " + sentSMSCount);
             generateAllTransactions.write("\r\n"); // line breaker
+            generateAllTransactions.write("Total SMS: " + (sentSMSCount + receivedSMSCount));
+            generateAllTransactions.write("\r\n"); // line breaker
 
             generateAllTransactions.write("\r\nALL FAILED TRANSACTIONS\r\n");
 
