@@ -23,30 +23,30 @@ public class TransactionProcessing {
         //display data by transaction type [MONEY TRANSFER]
         transactionType = TransactionTypes.MoneyTransfer;
         logger.log(Level.INFO, "Displaying all Money Transfer Transactions");
-        showTransactionType(transactionType);
+        showTransactionType(transactionType.toString());
 
         //display data by data type [BILLS PAYMENT]
         transactionType = TransactionTypes.BillsPayment;
         logger.log(Level.INFO, "Displaying all Bills Payment Transactions");
-        showTransactionType(transactionType);
+        showTransactionType(transactionType.toString());
 
         //display data by data type [BUY LOAD]
         transactionType = TransactionTypes.BuyLoad;
         logger.log(Level.INFO, "Displaying all Buy Load Transactions");
-        showTransactionType(transactionType);
+        showTransactionType(transactionType.toString());
 
         //display data by data type [ACCOUNT CREDITS]
         transactionType = TransactionTypes.AddAccountCredit;
         logger.log(Level.INFO, "Displaying all Account Credits Transactions");
-        showTransactionType(transactionType);
+        showTransactionType(transactionType.toString());
 
         //display data by data type [GAME CREDITS]
         transactionType = TransactionTypes.AddGameCredit;
         logger.log(Level.INFO, "Displaying all Game Credits Transactions");
-        showTransactionType(transactionType);
+        showTransactionType(transactionType.toString());
 
         //display all unique and duplicate Bills Payment Transactions
-        uniqueDuplicateBills();
+        //uniqueDuplicateBills();
 
     }
 
@@ -170,11 +170,39 @@ public class TransactionProcessing {
     }
 
     //show transactions by Type
-    public static void showTransactionType(Object transactionType){
+    public static void showTransactionType(String transactionType){
+
         for(Object transaction: transactionList) {
-            //filter transactions by transaction type
-            if(transaction.getClass().getName().contains(transactionType.toString())) {
-                logger.log(Level.INFO, transaction.toString());
+            switch(transactionType){
+                case "MoneyTransfer":
+                    if(transaction instanceof MoneyTransfer){
+                        logger.log(Level.INFO, transaction.toString());
+                        break;
+                    }
+
+                case "BillsPayment":
+                    if(transaction instanceof BillsPayment){
+                        logger.log(Level.INFO, transaction.toString());
+                        break;
+                    }
+
+                case "BuyLoad":
+                    if(transaction instanceof BuyLoad){
+                        logger.log(Level.INFO, transaction.toString());
+                        break;
+                    }
+
+                case "AddAccountCredit":
+                    if(transaction instanceof AddAccountCredit){
+                        logger.log(Level.INFO, transaction.toString());
+                        break;
+                    }
+
+                case "AddGameCredit":
+                    if(transaction instanceof AddGameCredit){
+                        logger.log(Level.INFO, transaction.toString());
+                        break;
+                    }
             }
         }
     }
