@@ -25,43 +25,15 @@ public class Main {
     static String transactionID= "";
 
     public static void main(String[] args) throws IOException {
-        dataPopulatePromo();
-        dataPopulateSMS();
+        //dataPopulatePromo();
+        //dataPopulateSMS();
 
-        userInput();
+        //userInput();
 
         //report generation for promo PISO PIZZA
-        //smsTransaction.generateReport("PISO PIZZA");
+        smsTransaction.generateReport("PISO PIZZA");
 
-        //retrieve all sms
-        display.displaySMS(smsTransaction.retrieveSMS());
-
-        //retrieve sms by start and end dates
-        LocalDateTime startDate = null; //specify start date
-        LocalDateTime endDate = null; //specify end date
-        display.displaySMS(smsTransaction.retrieveSMSStartEndDate(startDate, endDate));
-
-        //retrieve sms by promo code
-        String promoCode = "PISO PIZZA";
-        display.displaySMS(smsTransaction.retrieveSMSPromoCode(promoCode));
-
-        //retrieve sms by msisdn
-        String msisdn = "msisdn 1";
-        display.displaySMS(smsTransaction.retrieveSMSMSISDN(msisdn));
-
-        //retrieve sms by several msisdn
-        String arrMSISDN[] = {"09688515895", "msisdn 2", "msisdn 6"};
-        display.displaySMS(smsTransaction.retrieveSMSSeveralMSISDN(arrMSISDN));
-
-
-        //retrieve sms sent to system
-        display.displaySMS(smsTransaction.retrieveSMSToSystem());
-
-        //retrieve sms sent by system
-        display.displaySMS(smsTransaction.retrieveSMSBySystem());
-
-        //retrieve all promos
-        display.displayPromo(promoTransaction.retrievePromo());
+       // retrieveTransactions();
 
         SingletonDBConnection.disconnect();
 
@@ -116,6 +88,45 @@ public class Main {
         logger.log(Level.INFO, "Program Terminating ...");
     }
 
+    public static void retrieveTransactions(){
+        //retrieve all sms
+        logger.log(Level.INFO, "RETRIEVE ALL SMS");
+        display.displaySMS(smsTransaction.retrieveSMS());
+
+        //retrieve sms by start and end dates
+        logger.log(Level.INFO, "RETRIEVE SMS GIVEN A START AND END DATE");
+        LocalDateTime startDate = null; //specify start date
+        LocalDateTime endDate = null; //specify end date
+        display.displaySMS(smsTransaction.retrieveSMSStartEndDate(startDate, endDate));
+
+        //retrieve sms by promo code
+        logger.log(Level.INFO, "RETRIEVE SMS GIVEN A PROMO CODE");
+        String promoCode = "PISO PIZZA";
+        display.displaySMS(smsTransaction.retrieveSMSPromoCode(promoCode));
+
+        //retrieve sms by msisdn
+        logger.log(Level.INFO, "RETRIEVE SMS GIVEN AN MSISDN");
+        String msisdn = "msisdn 1";
+        display.displaySMS(smsTransaction.retrieveSMSMSISDN(msisdn));
+
+        //retrieve sms by several msisdn
+        logger.log(Level.INFO, "RETRIEVE SMS GIVEN SEVERAL MSISDN");
+        String arrMSISDN[] = {"09688515895", "msisdn 2", "msisdn 6"};
+        display.displaySMS(smsTransaction.retrieveSMSSeveralMSISDN(arrMSISDN));
+
+        //retrieve sms sent by system
+        logger.log(Level.INFO, "RETRIEVE SMS SENT BY SYSTEM");
+        display.displaySMS(smsTransaction.retrieveSMSBySystem());
+
+        //retrieve sms sent to system
+        logger.log(Level.INFO, "RETRIEVE SMS RECEIVED BY SYSTEM");
+        display.displaySMS(smsTransaction.retrieveSMSToSystem());
+
+        //retrieve all promos
+        logger.log(Level.INFO, "RETRIEVE ALL PROMOS");
+        display.displayPromo(promoTransaction.retrievePromo());
+    }
+
     public static void dataPopulatePromo() {
         //Insert promo
         // Insert Piso Pizza promo
@@ -153,6 +164,7 @@ public class Main {
     public static void dataPopulateSMS(){
         //insert 30 SMS for the "PISO PIZZA" promo
         //15 successful, 15 failed
+        //PISO PIZZA successful data
         for(int index = 0; index < 15; index++){
             transactionID = sms.generateTransactionID("PISO PIZZA");
            sms = new SMS(transactionID,
@@ -160,11 +172,12 @@ public class Main {
                    "System",
                    "dataPopulation "  + (index+1),
                    "1111",
-                   LocalDateTime.now());
+                   LocalDateTime.of(2022, Month.FEBRUARY, 26, 0, 0, 0));
 
-            smsTransaction.insertSMS(sms, true);
+            validateSMS.SMSChecker(sms);
         }
 
+        //PISO PIZZA failed data
         for(int index = 0; index < 15; index++){
             transactionID = sms.generateTransactionID("PISO PIZZA");
             sms = new SMS(transactionID,
@@ -172,13 +185,14 @@ public class Main {
                     "System",
                     "dataPopulation "  + (index+1),
                     "1111",
-                    LocalDateTime.now());
+                    LocalDateTime.of(2022, Month.MARCH, 2, 0, 0, 0));
 
-            smsTransaction.insertSMS(sms, false);
+            validateSMS.SMSChecker(sms);
         }
 
         //insert 15 SMS for the "FREE SHIPPING" promo
         //7 successful, 8 failed
+        //FREE SHIPPING successful data
         for(int index = 0; index < 7; index++){
             transactionID = sms.generateTransactionID("FREE SHIPPING");
             sms = new SMS(transactionID,
@@ -186,11 +200,12 @@ public class Main {
                     "System",
                     "dataPopulation "  + (index+1),
                     "2222",
-                    LocalDateTime.now());
+                    LocalDateTime.of(2022, Month.MARCH, 5, 0, 0, 0));
 
-            smsTransaction.insertSMS(sms, true);
+            validateSMS.SMSChecker(sms);
         }
 
+        //FREE SHIPPING failed data
         for(int index = 0; index < 8; index++){
             transactionID = sms.generateTransactionID("FREE SHIPPING");
             sms = new SMS(transactionID,
@@ -198,13 +213,14 @@ public class Main {
                     "System",
                     "dataPopulation "  + (index+1),
                     "2222",
-                    LocalDateTime.now());
+                    LocalDateTime.of(2022, Month.MARCH, 1, 0, 0, 0));
 
-            smsTransaction.insertSMS(sms, false);
+            validateSMS.SMSChecker(sms);
         }
 
-        //insert 15 SMS for the "PHP150 OFF, MIN 700" promo
+        //insert 15 SMS for the "PHP150 OFF" promo
         //7 successful, 8 failed
+        //PHP 150 OFF successful data
         for(int index = 0; index < 7; index++){
             transactionID = sms.generateTransactionID("PHP150 OFF");
             sms = new SMS(transactionID,
@@ -212,11 +228,12 @@ public class Main {
                     "System",
                     "dataPopulation "  + (index+1),
                     "3333",
-                    LocalDateTime.now());
+                    LocalDateTime.of(2022, Month.FEBRUARY, 15, 0, 0, 0));
 
-            smsTransaction.insertSMS(sms, true);
+            validateSMS.SMSChecker(sms);
         }
 
+        //PHP 150 OFF failed data
         for(int index = 0; index < 8; index++){
             transactionID = sms.generateTransactionID("PHP150 OFF");
             sms = new SMS(transactionID,
@@ -224,9 +241,9 @@ public class Main {
                     "System",
                     "dataPopulation "  + (index+1),
                     "3333",
-                    LocalDateTime.now());
+                    LocalDateTime.of(2022, Month.MARCH, 15, 0, 0, 0));
 
-            smsTransaction.insertSMS(sms, false);
+            validateSMS.SMSChecker(sms);
         }
     }
 }

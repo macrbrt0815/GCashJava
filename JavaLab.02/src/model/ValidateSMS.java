@@ -51,7 +51,7 @@ public class ValidateSMS implements SMSValidator{
             SMS systemSMS = new SMS("SYSFAILED " + sms.getTransactionID(),
                     sms.getMsisdn(),
                     sms.getSender(),
-                    "SYSTEM",
+                    "System",
                     sms.shortCode,
                     LocalDateTime.now());
 
