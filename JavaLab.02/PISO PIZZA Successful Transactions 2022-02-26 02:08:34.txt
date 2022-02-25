@@ -1,0 +1,260 @@
+Promo Code: PISO PIZZA
+Total Successful Transactions: 32
+
+ALL SUCCESSFUL TRANSACTIONS
+SMS
+Transaction ID: PISO PIZZA 1
+MSISDN: msisdn 1
+Recipient: System
+Sender: dataPopulation 1
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:39:36
+
+SMS
+Transaction ID: PISO PIZZA 2
+MSISDN: msisdn 2
+Recipient: System
+Sender: dataPopulation 2
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:39:36
+
+SMS
+Transaction ID: PISO PIZZA 3
+MSISDN: msisdn 3
+Recipient: System
+Sender: dataPopulation 3
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:39:36
+
+SMS
+Transaction ID: PISO PIZZA 4
+MSISDN: msisdn 4
+Recipient: System
+Sender: dataPopulation 4
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:39:36
+
+SMS
+Transaction ID: PISO PIZZA 5
+MSISDN: msisdn 5
+Recipient: System
+Sender: dataPopulation 5
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:39:36
+
+SMS
+Transaction ID: PISO PIZZA 6
+MSISDN: msisdn 6
+Recipient: System
+Sender: dataPopulation 6
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:39:36
+
+SMS
+Transaction ID: PISO PIZZA 7
+MSISDN: msisdn 7
+Recipient: System
+Sender: dataPopulation 7
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:39:36
+
+SMS
+Transaction ID: PISO PIZZA 8
+MSISDN: msisdn 8
+Recipient: System
+Sender: dataPopulation 8
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:39:36
+
+SMS
+Transaction ID: PISO PIZZA 9
+MSISDN: msisdn 9
+Recipient: System
+Sender: dataPopulation 9
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:39:36
+
+SMS
+Transaction ID: PISO PIZZA 10
+MSISDN: msisdn 10
+Recipient: System
+Sender: dataPopulation 10
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:39:36
+
+SMS
+Transaction ID: PISO PIZZA 11
+MSISDN: msisdn 11
+Recipient: System
+Sender: dataPopulation 11
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:39:36
+
+SMS
+Transaction ID: PISO PIZZA 12
+MSISDN: msisdn 12
+Recipient: System
+Sender: dataPopulation 12
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:39:36
+
+SMS
+Transaction ID: PISO PIZZA 13
+MSISDN: msisdn 13
+Recipient: System
+Sender: dataPopulation 13
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:39:36
+
+SMS
+Transaction ID: PISO PIZZA 14
+MSISDN: msisdn 14
+Recipient: System
+Sender: dataPopulation 14
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:39:36
+
+SMS
+Transaction ID: PISO PIZZA 15
+MSISDN: msisdn 15
+Recipient: System
+Sender: dataPopulation 15
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:39:36
+
+SMS
+Transaction ID: PISO PIZZA 31
+MSISDN: 09688515895
+Recipient: System
+Sender: mac cabote
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:40:08
+
+SMS
+Transaction ID: SYSSUCCESS PISO PIZZA 31
+MSISDN: 09688515895
+Recipient: mac cabote
+Sender: System
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:40:08
+
+SMS
+Transaction ID: PISO PIZZA 33
+MSISDN: msisdn 1
+Recipient: System
+Sender: dataPopulation 1
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:48:39
+
+SMS
+Transaction ID: PISO PIZZA 34
+MSISDN: msisdn 2
+Recipient: System
+Sender: dataPopulation 2
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:48:39
+
+SMS
+Transaction ID: PISO PIZZA 35
+MSISDN: msisdn 3
+Recipient: System
+Sender: dataPopulation 3
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:48:39
+
+SMS
+Transaction ID: PISO PIZZA 36
+MSISDN: msisdn 4
+Recipient: System
+Sender: dataPopulation 4
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:48:39
+
+SMS
+Transaction ID: PISO PIZZA 37
+MSISDN: msisdn 5
+Recipient: System
+Sender: dataPopulation 5
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:48:39
+
+SMS
+Transaction ID: PISO PIZZA 38
+MSISDN: msisdn 6
+Recipient: System
+Sender: dataPopulation 6
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:48:39
+
+SMS
+Transaction ID: PISO PIZZA 39
+MSISDN: msisdn 7
+Recipient: System
+Sender: dataPopulation 7
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:48:39
+
+SMS
+Transaction ID: PISO PIZZA 40
+MSISDN: msisdn 8
+Recipient: System
+Sender: dataPopulation 8
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:48:39
+
+SMS
+Transaction ID: PISO PIZZA 41
+MSISDN: msisdn 9
+Recipient: System
+Sender: dataPopulation 9
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:48:39
+
+SMS
+Transaction ID: PISO PIZZA 42
+MSISDN: msisdn 10
+Recipient: System
+Sender: dataPopulation 10
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:48:39
+
+SMS
+Transaction ID: PISO PIZZA 43
+MSISDN: msisdn 11
+Recipient: System
+Sender: dataPopulation 11
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:48:39
+
+SMS
+Transaction ID: PISO PIZZA 44
+MSISDN: msisdn 12
+Recipient: System
+Sender: dataPopulation 12
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:48:39
+
+SMS
+Transaction ID: PISO PIZZA 45
+MSISDN: msisdn 13
+Recipient: System
+Sender: dataPopulation 13
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:48:39
+
+SMS
+Transaction ID: PISO PIZZA 46
+MSISDN: msisdn 14
+Recipient: System
+Sender: dataPopulation 14
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:48:39
+
+SMS
+Transaction ID: PISO PIZZA 47
+MSISDN: msisdn 15
+Recipient: System
+Sender: dataPopulation 15
+Short Code: 1Pizza
+Time Stamp: 2022-02-26 01:48:39
+

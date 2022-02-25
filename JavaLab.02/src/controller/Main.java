@@ -29,8 +29,10 @@ public class Main {
         //dataPopulatePromo();
         //dataPopulateSMS();
 
-        userInput();
+        //userInput();
 
+        //report generation for promo PISO PIZZA
+        smsTransaction.generateReport("PISO PIZZA");
 /*
         //retrieve all sms
         display.displaySMS(smsTransaction.retrieveSMS());
@@ -45,8 +47,13 @@ public class Main {
         display.displaySMS(smsTransaction.retrieveSMSPromoCode(promoCode));
 
         //retrieve sms by msisdn
-        String msisdn = "123";
+        String msisdn = "msisdn 1";
         display.displaySMS(smsTransaction.retrieveSMSMSISDN(msisdn));
+
+        //retrieve sms by several msisdn
+        String msisdn[] = {"09688515895", "msisdn 2", "msisdn 6"};
+        display.displaySMS(smsTransaction.retrieveSMSSeveralMSISDN(msisdn));
+
 
         //retrieve sms sent to system
         display.displaySMS(smsTransaction.retrieveSMSToSystem());
@@ -150,45 +157,81 @@ public class Main {
 
     public static void dataPopulateSMS(){
         //insert 30 SMS for the "PISO PIZZA" promo
-        //smsTransaction.insertSMS(connection,sms);
-        for(int index = 0; index < 30; index++){
+        //15 successful, 15 failed
+        for(int index = 0; index < 15; index++){
             transactionID = sms.generateTransactionID("PISO PIZZA");
            sms = new SMS(transactionID,
                    "msisdn " + (index+1),
-                   "recipient "  + (index+1),
-                   "sender "  + (index+1),
+                   "System",
+                   "dataPopulation "  + (index+1),
                    "1Pizza",
                    LocalDateTime.now());
 
             smsTransaction.insertSMS(sms, true);
         }
 
-        //insert 15 SMS for the "FREE SHIPPING" promo
-        //initial data, to be updated
         for(int index = 0; index < 15; index++){
+            transactionID = sms.generateTransactionID("PISO PIZZA");
+            sms = new SMS(transactionID,
+                    "msisdn " + (index+1),
+                    "System",
+                    "dataPopulation "  + (index+1),
+                    "1Pizza",
+                    LocalDateTime.now());
+
+            smsTransaction.insertSMS(sms, false);
+        }
+
+        //insert 15 SMS for the "FREE SHIPPING" promo
+        //7 successful, 8 failed
+        for(int index = 0; index < 7; index++){
             transactionID = sms.generateTransactionID("FREE SHIPPING");
             sms = new SMS(transactionID,
                     "msisdn " + (index+1),
-                    "recipient "  + (index+1),
-                    "sender "  + (index+1),
+                    "System",
+                    "dataPopulation "  + (index+1),
                     "FreeShipMin1k",
                     LocalDateTime.now());
 
             smsTransaction.insertSMS(sms, true);
         }
 
+        for(int index = 0; index < 8; index++){
+            transactionID = sms.generateTransactionID("FREE SHIPPING");
+            sms = new SMS(transactionID,
+                    "msisdn " + (index+1),
+                    "System",
+                    "dataPopulation "  + (index+1),
+                    "FreeShipMin1k",
+                    LocalDateTime.now());
+
+            smsTransaction.insertSMS(sms, false);
+        }
+
         //insert 15 SMS for the "PHP150 OFF, MIN 700" promo
-        //initial data, to be updated
-        for(int index = 0; index < 15; index++){
+        //7 successful, 8 failed
+        for(int index = 0; index < 7; index++){
             transactionID = sms.generateTransactionID("PHP150 OFF, MIN 700");
             sms = new SMS(transactionID,
                     "msisdn " + (index+1),
-                    "recipient "  + (index+1),
-                    "sender "  + (index+1),
+                    "System",
+                    "dataPopulation "  + (index+1),
                     "150Off",
                     LocalDateTime.now());
 
             smsTransaction.insertSMS(sms, true);
+        }
+
+        for(int index = 0; index < 8; index++){
+            transactionID = sms.generateTransactionID("PHP150 OFF, MIN 700");
+            sms = new SMS(transactionID,
+                    "msisdn " + (index+1),
+                    "System",
+                    "dataPopulation "  + (index+1),
+                    "150Off",
+                    LocalDateTime.now());
+
+            smsTransaction.insertSMS(sms, false);
         }
     }
 }

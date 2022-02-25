@@ -14,6 +14,8 @@ public interface ManageSMS {
     ArrayList retrieveSMSPromoCode(String shortCode);
     ArrayList retrieveSMSMSISDN(String msisdn);
 
+    ArrayList retrieveSMSSeveralMSISDN(String msisd[]);
+
     ArrayList retrieveSMSBySystem();
     ArrayList retrieveSMSToSystem();
 }

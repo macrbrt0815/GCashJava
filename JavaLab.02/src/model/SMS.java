@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class SMS {
@@ -10,6 +11,11 @@ public class SMS {
     protected String sender = "";
     protected String shortCode = "";
     protected LocalDateTime timeStamp;
+
+    protected boolean isSuccessful;
+
+
+    final private static DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public SMS(){
     }
@@ -21,6 +27,16 @@ public class SMS {
         this.sender = sender;
         this.shortCode = shortCode;
         this.timeStamp = timeStamp;
+    }
+
+    public SMS(String transactionID, String msisdn, String recipient, String sender , String shortCode, LocalDateTime timeStamp, boolean isSuccessful){
+        this.transactionID = transactionID;
+        this.msisdn = msisdn;
+        this.recipient = recipient;
+        this.sender = sender;
+        this.shortCode = shortCode;
+        this.timeStamp = timeStamp;
+        this.isSuccessful = isSuccessful;
     }
 
     public String getMsisdn() {
@@ -71,6 +87,10 @@ public class SMS {
         this.timeStamp = timeStamp;
     }
 
+    public boolean isSuccessful() { return isSuccessful; }
+
+    public void setSuccessful(boolean successful) { isSuccessful = successful; }
+
     public String generateTransactionID(String promoCode){
         //retrieve all sms in the db with the given shortcode
         SMSTransactions smsTransaction = new SMSTransactions();
@@ -92,6 +112,6 @@ public class SMS {
                 "\nRecipient: " + this.recipient +
                 "\nSender: " + this.sender +
                 "\nShort Code: " + this.shortCode +
-                "\nTime Stamp: " + this.timeStamp;
+                "\nTime Stamp: " + this.timeStamp.format(format) + "\n";
     }
 }
