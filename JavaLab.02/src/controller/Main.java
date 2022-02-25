@@ -8,7 +8,6 @@ import utility.SingletonDBConnection;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,14 +25,14 @@ public class Main {
     static String transactionID= "";
 
     public static void main(String[] args) throws IOException {
-        //dataPopulatePromo();
-        //dataPopulateSMS();
+        dataPopulatePromo();
+        dataPopulateSMS();
 
-        //userInput();
+        userInput();
 
         //report generation for promo PISO PIZZA
-        smsTransaction.generateReport("PISO PIZZA");
-/*
+        //smsTransaction.generateReport("PISO PIZZA");
+
         //retrieve all sms
         display.displaySMS(smsTransaction.retrieveSMS());
 
@@ -51,8 +50,8 @@ public class Main {
         display.displaySMS(smsTransaction.retrieveSMSMSISDN(msisdn));
 
         //retrieve sms by several msisdn
-        String msisdn[] = {"09688515895", "msisdn 2", "msisdn 6"};
-        display.displaySMS(smsTransaction.retrieveSMSSeveralMSISDN(msisdn));
+        String arrMSISDN[] = {"09688515895", "msisdn 2", "msisdn 6"};
+        display.displaySMS(smsTransaction.retrieveSMSSeveralMSISDN(arrMSISDN));
 
 
         //retrieve sms sent to system
@@ -63,7 +62,7 @@ public class Main {
 
         //retrieve all promos
         display.displayPromo(promoTransaction.retrievePromo());
-*/
+
         SingletonDBConnection.disconnect();
 
     }
@@ -109,11 +108,7 @@ public class Main {
                     } else {
                         logger.log(Level.INFO, "Promo code and Short code didn't match");
                     }
-                } else {
-                    logger.log(Level.INFO, shortCode + " shortCode doesn't exist");
                 }
-            } else {
-                logger.log(Level.INFO, promoCode + " promoCode doesn't exist");
             }
 
             choice = Helper.getStringInput("Do you want to try again? [YES/NO]: ");
@@ -127,7 +122,7 @@ public class Main {
         promo = new Promo("PISO PIZZA",
                 "Pizza for 1 peso only. " +
                         "Valid from February 1 - March 1, 2022.",
-                "1Pizza",
+                "1111",
                 LocalDateTime.of(2022, Month.FEBRUARY, 1, 0, 0, 0),
                 LocalDateTime.of(2022, Month.MARCH, 1, 0, 0, 0));
 
@@ -137,17 +132,17 @@ public class Main {
         promo = new Promo("FREE SHIPPING",
                 "Free shipping fee nationwide minimum spent of Php 1000.00. " +
                         "Valid from March 3 - March 4, 2022. ",
-                "FreeShipMin1k",
+                "2222",
                 LocalDateTime.of(2022, Month.MARCH, 3, 0, 0, 0),
                 LocalDateTime.of(2022, Month.MARCH, 3, 23, 59, 59));
 
         promoTransaction.insertPromo(promo);
 
         // Insert 150 OFF promo
-        promo = new Promo("PHP150 OFF, MIN 700",
+        promo = new Promo("PHP150 OFF",
                 "Less Php 150, minimum spent of 700. " +
                         "Valid from February 12 - February 28, 2022.",
-                "150Off",
+                "3333",
                 LocalDateTime.of(2022, Month.FEBRUARY, 12, 0, 0, 0),
                 LocalDateTime.of(2022, Month.FEBRUARY, 28, 23, 59, 59));
 
@@ -164,7 +159,7 @@ public class Main {
                    "msisdn " + (index+1),
                    "System",
                    "dataPopulation "  + (index+1),
-                   "1Pizza",
+                   "1111",
                    LocalDateTime.now());
 
             smsTransaction.insertSMS(sms, true);
@@ -176,7 +171,7 @@ public class Main {
                     "msisdn " + (index+1),
                     "System",
                     "dataPopulation "  + (index+1),
-                    "1Pizza",
+                    "1111",
                     LocalDateTime.now());
 
             smsTransaction.insertSMS(sms, false);
@@ -190,7 +185,7 @@ public class Main {
                     "msisdn " + (index+1),
                     "System",
                     "dataPopulation "  + (index+1),
-                    "FreeShipMin1k",
+                    "2222",
                     LocalDateTime.now());
 
             smsTransaction.insertSMS(sms, true);
@@ -202,7 +197,7 @@ public class Main {
                     "msisdn " + (index+1),
                     "System",
                     "dataPopulation "  + (index+1),
-                    "FreeShipMin1k",
+                    "2222",
                     LocalDateTime.now());
 
             smsTransaction.insertSMS(sms, false);
@@ -211,24 +206,24 @@ public class Main {
         //insert 15 SMS for the "PHP150 OFF, MIN 700" promo
         //7 successful, 8 failed
         for(int index = 0; index < 7; index++){
-            transactionID = sms.generateTransactionID("PHP150 OFF, MIN 700");
+            transactionID = sms.generateTransactionID("PHP150 OFF");
             sms = new SMS(transactionID,
                     "msisdn " + (index+1),
                     "System",
                     "dataPopulation "  + (index+1),
-                    "150Off",
+                    "3333",
                     LocalDateTime.now());
 
             smsTransaction.insertSMS(sms, true);
         }
 
         for(int index = 0; index < 8; index++){
-            transactionID = sms.generateTransactionID("PHP150 OFF, MIN 700");
+            transactionID = sms.generateTransactionID("PHP150 OFF");
             sms = new SMS(transactionID,
                     "msisdn " + (index+1),
                     "System",
                     "dataPopulation "  + (index+1),
-                    "150Off",
+                    "3333",
                     LocalDateTime.now());
 
             smsTransaction.insertSMS(sms, false);

@@ -23,7 +23,9 @@ public class PromoTransactions implements ManagePromo {
     String sqlStatement = "";
     Statement statement = null;
     ResultSet resultSet = null;
-    boolean isPromoEmpty;
+
+    boolean isEmpty;
+
     Promo retrievedPromo;
 
     @Override //insert a promo into database
@@ -84,7 +86,6 @@ public class PromoTransactions implements ManagePromo {
 
         //empty allPromo ArrayList
         allPromo.clear();
-        isPromoEmpty = true;
 
         //retrieve all promo
         sqlStatement = "SELECT * FROM promo";
@@ -94,7 +95,6 @@ public class PromoTransactions implements ManagePromo {
             resultSet = statement.executeQuery(sqlStatement);
 
             while (resultSet.next()) {
-                isPromoEmpty = false;
                 retrievedPromo = new Promo(resultSet.getString("promoCode"),
                         resultSet.getString("details"),
                         resultSet.getString("shortCode"),
@@ -116,28 +116,25 @@ public class PromoTransactions implements ManagePromo {
                 logger.log(Level.SEVERE, "ERROR IN CLOSING", e);
             }
         }
-        if (isPromoEmpty){
+        if (allPromo.isEmpty()){
             logger.log(Level.INFO, "Promo database empty.");
-            return null;
-        } else {
-            return allPromo;
         }
+        return allPromo;
     }
 
     @Override //retrieve a promoCode from database using
     public String retrievePromoCodeByShortCode(String shortCode) {
         String promoCode = "";
+        isEmpty = true;
 
-        isPromoEmpty = false;
         sqlStatement = "SELECT promoCode FROM promo WHERE shortCode = \"" + shortCode + "\"";
 
         try {
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sqlStatement);
 
-            if(!resultSet.next()){
-                isPromoEmpty = true;
-            } else {
+            while (resultSet.next()) {
+                isEmpty = false;
                 promoCode = resultSet.getString("promoCode");
             }
 
@@ -154,28 +151,26 @@ public class PromoTransactions implements ManagePromo {
                 logger.log(Level.SEVERE, "ERROR IN CLOSING", e);
             }
         }
-        if (isPromoEmpty){
+        if (isEmpty){
             logger.log(Level.INFO, "No promo with " + shortCode + " shortCode.");
             return null;
-        } else {
-            return promoCode;
         }
+        return promoCode;
     }
 
     @Override
     public String retrieveShortCodeByPromoCode(String promoCode) {
         String shortCode = "";
+        isEmpty = true;
 
-        isPromoEmpty = false;
         sqlStatement = "SELECT shortCode FROM promo WHERE promoCode = \"" + promoCode + "\"";
 
         try {
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sqlStatement);
 
-            if(!resultSet.next()){
-                isPromoEmpty = true;
-            } else {
+            while (resultSet.next()) {
+                isEmpty = false;
                 shortCode = resultSet.getString("shortCode");
             }
 
@@ -192,12 +187,11 @@ public class PromoTransactions implements ManagePromo {
                 logger.log(Level.SEVERE, "ERROR IN CLOSING", e);
             }
         }
-        if (isPromoEmpty){
+        if (isEmpty){
             logger.log(Level.INFO, "No promo with " + promoCode + " promoCode.");
             return null;
-        } else {
-            return shortCode;
         }
+        return shortCode;
     }
 
     @Override

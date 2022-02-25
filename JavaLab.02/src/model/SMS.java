@@ -97,7 +97,7 @@ public class SMS {
         ArrayList transactionList  = smsTransaction.retrieveSMSPromoCode(promoCode);
 
         //return promoCode + size of transaction list + 1 (transactionID format)
-        if (transactionList != null){
+        if (!transactionList.isEmpty()){
             return (promoCode + " " + String.valueOf(transactionList.size() + 1));
         } else {
             return (promoCode + " 1");

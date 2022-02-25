@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,7 +38,6 @@ public class SMSTransactions implements ManageSMS {
     String sqlStatement = "";
     Statement statement = null;
     ResultSet resultSet = null;
-    boolean isSMSEmpty;
     SMS retrievedSMS;
 
     @Override //insert sms into database
@@ -82,17 +80,15 @@ public class SMSTransactions implements ManageSMS {
 
         //empty allSMS ArrayList
         allSMS.clear();
-        isSMSEmpty = true;
 
         //retrieve all SMS
-        sqlStatement = "SELECT * FROM sms ORDER BY id";
+        sqlStatement = "SELECT * FROM sms";
 
         try {
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sqlStatement);
 
             while (resultSet.next()) {
-                isSMSEmpty = false;
                 retrievedSMS = new SMS(resultSet.getString(1),
                         resultSet.getString(2),
                         resultSet.getString(3),
@@ -102,7 +98,6 @@ public class SMSTransactions implements ManageSMS {
 
                 allSMS.add(retrievedSMS);
             }
-
 
         } catch (SQLException sqle){
             logger.log(Level.SEVERE, "SQLException", sqle);
@@ -117,12 +112,10 @@ public class SMSTransactions implements ManageSMS {
                 logger.log(Level.SEVERE, "ERROR IN CLOSING", e);
             }
         }
-        if (isSMSEmpty){
+        if(allSMS.isEmpty()){
             logger.log(Level.INFO, "SMS database empty.");
-            return null;
-        } else {
-            return allSMS;
         }
+        return allSMS;
     }
 
     @Override //retrieve SMS between given startDate and endDate
@@ -130,17 +123,15 @@ public class SMSTransactions implements ManageSMS {
 
         //empty allSMS ArrayList
         allSMS.clear();
-        isSMSEmpty = true;
 
         //retrieve all sms between startDate and endDate
-        sqlStatement = "SELECT * FROM sms WHERE timeStamp BETWEEN \"" + startDate + "\" AND \"" + endDate + "\" ORDER BY id";
+        sqlStatement = "SELECT * FROM sms WHERE timeStamp BETWEEN \"" + startDate + "\" AND \"" + endDate + "\"";
 
         try {
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sqlStatement);
 
             while (resultSet.next()) {
-                isSMSEmpty = false;
                 retrievedSMS = new SMS(resultSet.getString(1),
                         resultSet.getString(2),
                         resultSet.getString(3),
@@ -163,12 +154,10 @@ public class SMSTransactions implements ManageSMS {
                 logger.log(Level.SEVERE, "ERROR IN CLOSING", e);
             }
         }
-        if (isSMSEmpty){
+        if (allSMS.isEmpty()){
             logger.log(Level.INFO, "No SMS between " + startDate + " and " + endDate + " .");
-            return null;
-        } else {
-            return allSMS;
         }
+        return allSMS;
     }
 
     @Override //retrieve SMS using promoCode
@@ -176,21 +165,19 @@ public class SMSTransactions implements ManageSMS {
 
         //empty allSMS ArrayList
         allSMS.clear();
-        isSMSEmpty = true;
 
         //retrieve shortCode using promoCode
         PromoTransactions promoTransaction = new PromoTransactions();
         String shortCode = promoTransaction.retrieveShortCodeByPromoCode(promoCode);
 
         //retrieve all sms using retrieved shortCode
-        sqlStatement = "SELECT * FROM sms WHERE shortCode = \"" + shortCode + "\" ORDER BY id";
+        sqlStatement = "SELECT * FROM sms WHERE shortCode = \"" + shortCode + "\"";
 
         try {
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sqlStatement);
 
             while (resultSet.next()) {
-                isSMSEmpty = false;
                 retrievedSMS = new SMS(resultSet.getString(1),
                         resultSet.getString(2),
                         resultSet.getString(3),
@@ -214,12 +201,10 @@ public class SMSTransactions implements ManageSMS {
                 logger.log(Level.SEVERE, "ERROR IN CLOSING", e);
             }
         }
-        if (isSMSEmpty){
+        if(allSMS.isEmpty()){
             logger.log(Level.INFO, "No SMS with " + promoCode + " promoCode.");
-            return null;
-        } else {
-            return allSMS;
         }
+        return allSMS;
     }
 
     @Override //retrieve sms using msisdn
@@ -227,17 +212,15 @@ public class SMSTransactions implements ManageSMS {
 
         //empty allSMS ArrayList
         allSMS.clear();
-        isSMSEmpty = true;
 
         //retrieve SMS using msisdn
-        sqlStatement = "SELECT * FROM sms WHERE msisdn = \"" + msisdn + "\" ORDER BY id";
+        sqlStatement = "SELECT * FROM sms WHERE msisdn = \"" + msisdn + "\"";
 
         try {
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sqlStatement);
 
             while (resultSet.next()) {
-                isSMSEmpty = false;
                 retrievedSMS = new SMS(resultSet.getString(1),
                         resultSet.getString(2),
                         resultSet.getString(3),
@@ -261,31 +244,27 @@ public class SMSTransactions implements ManageSMS {
                 logger.log(Level.SEVERE, "ERROR IN CLOSING", e);
             }
         }
-        if (isSMSEmpty){
+        if (allSMS.isEmpty()){
             logger.log(Level.INFO, "No SMS with " + msisdn + " msisdn.");
-            return null;
-        } else {
-            return allSMS;
         }
+        return allSMS;
     }
 
     @Override
     public ArrayList retrieveSMSSeveralMSISDN(String[] msisd) {
         //empty allSMS ArrayList
         allSMS.clear();
-        isSMSEmpty = true;
 
 
         for(int count = 0; count < msisd.length; count++){
             //retrieve SMS using msisdn
-            sqlStatement = "SELECT * FROM sms WHERE msisdn = \"" + msisd[count] + "\" ORDER BY id";
+            sqlStatement = "SELECT * FROM sms WHERE msisdn = \"" + msisd[count] + "\"";
 
             try {
                 statement = connection.createStatement();
                 resultSet = statement.executeQuery(sqlStatement);
 
                 while (resultSet.next()) {
-                    isSMSEmpty = false;
                     retrievedSMS = new SMS(resultSet.getString(1),
                             resultSet.getString(2),
                             resultSet.getString(3),
@@ -309,29 +288,25 @@ public class SMSTransactions implements ManageSMS {
                 }
             }
         }
-        if (isSMSEmpty){
+        if (allSMS.isEmpty()){
             logger.log(Level.INFO, "No SMS with given msisdn.");
-            return null;
-        } else {
-            return allSMS;
         }
+        return allSMS;
     }
 
     @Override
     public ArrayList retrieveSMSBySystem() {
         //empty allSMS ArrayList
         allSMS.clear();
-        isSMSEmpty = true;
 
         //retrieve SMS using msisdn
-        sqlStatement = "SELECT * FROM sms WHERE sender = \"System\" ORDER BY id";
+        sqlStatement = "SELECT * FROM sms WHERE sender = \"System\"";
 
         try {
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sqlStatement);
 
             while (resultSet.next()) {
-                isSMSEmpty = false;
                 retrievedSMS = new SMS(resultSet.getString(1),
                         resultSet.getString(2),
                         resultSet.getString(3),
@@ -355,29 +330,25 @@ public class SMSTransactions implements ManageSMS {
                 logger.log(Level.SEVERE, "ERROR IN CLOSING", e);
             }
         }
-        if (isSMSEmpty){
+        if (allSMS.isEmpty()){
             logger.log(Level.INFO, "No SMS sent by System");
-            return null;
-        } else {
-            return allSMS;
         }
+        return allSMS;
     }
 
     @Override
     public ArrayList retrieveSMSToSystem() {
         //empty allSMS ArrayList
         allSMS.clear();
-        isSMSEmpty = true;
 
         //retrieve SMS using msisdn
-        sqlStatement = "SELECT * FROM sms WHERE recipient = \"System\" ORDER BY id";
+        sqlStatement = "SELECT * FROM sms WHERE recipient = \"System\"";
 
         try {
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sqlStatement);
 
             while (resultSet.next()) {
-                isSMSEmpty = false;
                 retrievedSMS = new SMS(resultSet.getString(1),
                         resultSet.getString(2),
                         resultSet.getString(3),
@@ -401,12 +372,10 @@ public class SMSTransactions implements ManageSMS {
                 logger.log(Level.SEVERE, "ERROR IN CLOSING", e);
             }
         }
-        if (isSMSEmpty){
+        if (allSMS.isEmpty()){
             logger.log(Level.INFO, "No SMS sent to System");
-            return null;
-        } else {
-            return allSMS;
         }
+        return allSMS;
     }
 
     public void generateReport(String promoCode){
