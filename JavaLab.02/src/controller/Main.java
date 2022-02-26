@@ -124,17 +124,17 @@ public class Main {
 
         //retrieve sms by promo code
         logger.log(Level.INFO, "RETRIEVE SMS GIVEN A PROMO CODE");
-        String promoCode = "PISO PIZZA";
+        String promoCode = "PISO PIZZA"; //specify promo code
         display.displaySMS(smsTransaction.retrieveSMSPromoCode(promoCode));
 
         //retrieve sms by msisdn
         logger.log(Level.INFO, "RETRIEVE SMS GIVEN AN MSISDN");
-        String msisdn = "msisdn 1";
+        String msisdn = "msisdn 1"; //specify msisdn
         display.displaySMS(smsTransaction.retrieveSMSMSISDN(msisdn));
 
         //retrieve sms by several msisdn
         logger.log(Level.INFO, "RETRIEVE SMS GIVEN SEVERAL MSISDN");
-        String arrMSISDN[] = {"09688515895", "msisdn 2", "msisdn 6"};
+        String arrMSISDN[] = {"09688515895", "msisdn 2", "msisdn 6"}; //specify msisdn
         display.displaySMS(smsTransaction.retrieveSMSSeveralMSISDN(arrMSISDN));
 
         //retrieve sms sent by system
