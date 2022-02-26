@@ -25,17 +25,41 @@ public class Main {
     static String transactionID= "";
 
     public static void main(String[] args) throws IOException {
-        //dataPopulatePromo();
-        //dataPopulateSMS();
+        String menuChoice = "";
+        String choice = "";
+        String promoCode = "";
 
-        //userInput();
+        do{
+            menuChoice = Helper.getStringInput("What do you want to do? \n" +
+                    "1 - Populate Data \n" +
+                    "2 - Register to a Promo \n" +
+                    "3 - Retrieve Transactions \n" +
+                    "4 - Generate a Report \n");
 
-        //report generation for promo PISO PIZZA
-        smsTransaction.generateReport("PISO PIZZA");
-
-       // retrieveTransactions();
-
+            switch (menuChoice){
+                case "1":
+                    dataPopulatePromo();
+                    dataPopulateSMS();
+                    break;
+                case "2":
+                    userInput();
+                    break;
+                case "3":
+                    retrieveTransactions();
+                    break;
+                case "4":
+                    promoCode = Helper.getStringInput("Enter Promo Code: ");
+                    if(validateSMS.validatePromoCode(promoCode)){
+                        logger.log(Level.INFO, "Report generated for promo code: " + promoCode);
+                        smsTransaction.generateReport(promoCode);
+                    }
+                    break;
+            }
+            choice = Helper.getStringInput("Do you want do something else? [YES/NO]: ");
+        } while (choice.equalsIgnoreCase("YES"));
+        logger.log(Level.INFO, "Program Terminating ...");
         SingletonDBConnection.disconnect();
+
 
     }
 
@@ -83,9 +107,8 @@ public class Main {
                 }
             }
 
-            choice = Helper.getStringInput("Do you want to try again? [YES/NO]: ");
+            choice = Helper.getStringInput("Do you want to Register another promo? [YES/NO]: ");
         } while (choice.equalsIgnoreCase("YES"));
-        logger.log(Level.INFO, "Program Terminating ...");
     }
 
     public static void retrieveTransactions(){
